@@ -2,27 +2,45 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define NUM 300
-#define ID  301
-#define SOM 302
-#define SUB 303
-#define MUL 304
-#define DIV 305
-#define IGL 306
-#define PEV 307
-#define APR 308
-#define FPR 309
-#define FIM 310
-#define ERR 311
+#define if 1
+#define else 2
+#define int 3
+#define return 4
+#define void 5
+#define while 6
+#define ID 7
+#define NUM 8
+#define SUM 9
+#define MINUS 10
+#define MULT 11
+#define DIV 12
+#define MINOR 13
+#define MINE 14
+#define MAJOR 15
+#define MAJE 16
+#define EQUAL 17
+#define DIFF 18
+#define ATR 19
+#define EOL 20
+#define COMMA 21
+#define OPENCOL 22
+#define CLOSECOL 23
+#define OPENKEY 24
+#define CLOSEKEY 25
+#define OPENPAR 26
+#define CLOSEPAR 27
+#define OPENCOMMENT 28
+#define CLOSECOMMENT 29
 %}
 
 DIGITO [0-9]
 LETRA [a-zA-Z]
 OUTRO [^0-9a-zA-Z;/=\-"+""*""("")"]
+
 %%
 {DIGITO}+			return NUM;
 {LETRA}({LETRA}|{DIGITO})*	return ID;
-"+"				return SOM;
+"+"				return SUM;
 "-"				return SUB;
 "*"				return MUL;
 "/"				return DIV;
