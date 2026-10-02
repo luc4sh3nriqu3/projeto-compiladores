@@ -2,12 +2,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define if 1
-#define else 2
-#define int 3
-#define return 4
-#define void 5
-#define while 6
+#define IF 1
+#define ELSE 2
+#define INT 3
+#define RET 4
+#define VOID 5
+#define WHILE 6
 #define ID 7
 #define NUM 8
 #define SUM 9
@@ -31,71 +31,109 @@
 #define CLOSEPAR 27
 #define OPENCOMMENT 28
 #define CLOSECOMMENT 29
+#define FIM 30
+#define ERR 31
+
+int count_line = 1;
 %}
+
+/* Declaração de um estado exclusivo para comentários */
+%x COMMENT
 
 DIGITO [0-9]
 LETRA [a-zA-Z]
-OUTRO [^0-9a-zA-Z;/=\-"+""*""("")"]
 
 %%
-{DIGITO}+			return NUM;
-{LETRA}({LETRA}|{DIGITO})*	return ID;
-"+"				return SUM;
-"-"				return SUB;
-"*"				return MUL;
-"/"				return DIV;
-=				return IGL;
-;				return PEV;
-"("				return APR;
-")"				return FPR;
-<<EOF>>                 	return FIM;
-\n
-\t
-[ ]+
-{OUTRO}+			return ERR;
+"/*"            { BEGIN(COMMENT); }           /* Entra no estado de comentário */
+<COMMENT>"*/"   { BEGIN(INITIAL); }           /* Sai do estado e volta ao normal */
+<COMMENT>\n     { count_line++; }             /* Conta as linhas dentro do comentário */
+<COMMENT>.      { /* ignora o resto */ }      /* Ignora outros caracteres no comentário */
+
+"if"        { return IF; }
+"else"      { return ELSE; }
+"int"       { return INT; }
+"return"    { return RET; }
+"void"      { return VOID; }
+"while"     { return WHILE; }
+
+{LETRA}({LETRA}|{DIGITO})*  { return ID; }
+{DIGITO}+                   { return NUM; }
+
+"+"         { return SUM; }
+"-"         { return MINUS; }
+"*"         { return MULT; }
+"/"         { return DIV; }
+"<"         { return MINOR; }
+"<="        { return MINE; }
+">"         { return MAJOR; }
+">="        { return MAJE; }
+"=="        { return EQUAL; }
+"!="        { return DIFF; }
+"="         { return ATR; }
+";"         { return EOL; }
+","         { return COMMA; }
+"{"         { return OPENCOL; }
+"}"         { return CLOSECOL; }
+"["         { return OPENKEY; }
+"]"         { return CLOSEKEY; }
+"("         { return OPENPAR; }
+")"         { return CLOSEPAR; }
+
+\n          { count_line++; }
+[ \t]+      { /* ignora espacos */ }
+.           { return ERR; }
+<<EOF>>     { return FIM; }
 %%
 
 int main(int argc, char *argv[])
 {
-  int token, i, buf[100];
+  int token;
   FILE *f_in;
- 
-  for (i=0;i<=99;i++) buf[i] = 0;
- 
 
   if (argc == 2)
   {
-    if(f_in = fopen(argv[1],"r"))  yyin = f_in;
+    if((f_in = fopen(argv[1],"r")))  yyin = f_in;
     else  perror(argv[0]);
   }
   else  yyin = stdin;
   
-  i = 0;
-  while ((token=yylex())!=FIM)
+  /* Removemos os vetores. Agora processamos o token assim que ele é lido */
+  while ((token=yylex()) != FIM)
   {
-    buf[i] = token;
-    i++;
-  }
-
-  i = 0;
-  while (buf[i] != 0)
-  {
-    switch(buf[i])
+    switch(token)
     {
-      case NUM: printf("NUM "); break;
-      case ID:  printf("ID ");  break;
-      case SOM: printf("+ ");   break;
-      case SUB: printf("- ");   break;
-      case MUL: printf("* ");   break;
-      case DIV: printf("/ ");   break;
-      case IGL: printf(" = ");  break;
-      case PEV: printf("; \n"); break;
-      case APR: printf("( ");   break;
-      case FPR: printf(") ");   break;
-      case ERR: printf("ERR "); break;
+      case IF: printf("token: IF  line: %d\n", count_line); break;
+      case ELSE: printf("token: ELSE  line: %d\n", count_line); break;
+      case INT: printf("token: INT  line: %d\n", count_line); break;
+      case RET: printf("token: RETURN  line: %d\n", count_line); break;
+      case VOID: printf("token: VOID  line: %d\n", count_line); break;
+      case WHILE: printf("token: WHILE  line: %d\n", count_line); break;
+      case ID: printf("token: ID  line: %d\n", count_line); break;
+      case NUM: printf("token: NUM  line: %d\n", count_line); break;
+      case SUM: printf("token: SUM  line: %d\n", count_line); break;
+      case MINUS: printf("token: MINUS  line: %d\n", count_line); break;
+      case MULT: printf("token: MULT  line: %d\n", count_line); break;
+      case DIV: printf("token: DIV  line: %d\n", count_line); break;
+      case MINOR: printf("token: MINOR  line: %d\n", count_line); break;
+      case MINE: printf("token: MINE  line: %d\n", count_line); break;
+      case MAJOR: printf("token: MAJOR  line: %d\n", count_line); break;
+      case MAJE: printf("token: MAJE  line: %d\n", count_line); break;
+      case EQUAL: printf("token: EQUAL  line: %d\n", count_line); break;
+      case DIFF: printf("token: DIFF  line: %d\n", count_line); break;
+      case ATR: printf("token: ATR  line: %d\n", count_line); break;
+      case EOL: printf("token: EOL  line: %d\n", count_line); break;
+      case COMMA: printf("token: COMMA  line: %d\n", count_line); break;
+      case OPENCOL: printf("token: OPENCOL  line: %d\n", count_line); break;
+      case CLOSECOL: printf("token: CLOSECOL  line: %d\n", count_line); break;
+      case OPENKEY: printf("token: OPENKEY  line: %d\n", count_line); break;
+      case CLOSEKEY: printf("token: CLOSEKEY  line: %d\n", count_line); break;
+      case OPENPAR: printf("token: OPENPAR  line: %d\n", count_line); break;
+      case CLOSEPAR: printf("token: CLOSEPAR  line: %d\n", count_line); break;
+      case OPENCOMMENT: printf("token: OPENCOMMENT  line: %d\n", count_line); break;
+      case CLOSECOMMENT: printf("token: CLOSECOMMENT  line: %d\n", count_line); break;
+      case ERR: printf("token: ERR  line: %d\n", count_line); break;
     }
-    i++;
   }
+  
   return(0);
 }
-
