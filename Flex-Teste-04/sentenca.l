@@ -1,3 +1,4 @@
+
 %{
 #include <stdlib.h>
 #include <stdio.h>
@@ -35,6 +36,7 @@
 #define ERR 31
 
 int count_line = 1;
+FILE *arquivo_saida;
 %}
 
 %option noyywrap
@@ -91,3 +93,48 @@ LETRA [a-zA-Z]
 <<EOF>>     { return FIM; }
 
 %%
+
+int main(int argc, char *argv[])
+{
+    int token;
+
+    if (argc < 2) {
+        printf("Uso: %s entrada.txt\n", argv[0]);
+        return 1;
+    }
+
+    yyin = fopen(argv[1], "r");
+
+    if (yyin == NULL) {
+        perror("Erro ao abrir arquivo de entrada");
+        return 1;
+    }
+
+    arquivo_saida = fopen("tokens.txt", "w");
+
+    if (arquivo_saida == NULL) {
+        perror("Erro ao criar arquivo de tokens");
+        fclose(yyin);
+        return 1;
+    }
+
+    while ((token = yylex()) != FIM) {
+        fprintf(arquivo_saida, "%d\n", token);
+
+        if (token == ERR) {
+            fprintf(stderr, "Erro lexico na linha %d\n", count_line);
+            fclose(arquivo_saida);
+            fclose(yyin);
+            return 1;
+        }
+    }
+
+    fprintf(arquivo_saida, "%d\n", FIM);
+
+    fclose(arquivo_saida);
+    fclose(yyin);
+
+    printf("Tokens salvos em tokens.txt\n");
+
+    return 0;
+}
