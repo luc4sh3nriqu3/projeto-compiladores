@@ -17,7 +17,6 @@ extern FILE *yyin;
 %token MINOR MINE MAJOR MAJE EQUAL DIFF ATR
 %token EOL COMMA
 %token OPENCOL CLOSECOL OPENKEY CLOSEKEY OPENPAR CLOSEPAR
-%token OPENCOMMENT CLOSECOMMENT
 %token ERR
 
 %nonassoc LOWER_THAN_ELSE
@@ -117,19 +116,92 @@ selecao_decl
     | IF OPENPAR expressao CLOSEPAR statement ELSE statement
     ;
 
-/* PROVISORIO: substituir pelas regras 16 em diante */
+/* 16 */
 iteracao_decl
     : WHILE OPENPAR expressao CLOSEPAR statement
     ;
 
+/* 17 */
 retorno_decl
     : RET EOL
     | RET expressao EOL
     ;
 
+/* 18 */
 expressao
+    : var ATR expressao
+    | simples_expressao
+    ;
+
+/* 19 */
+var
     : ID
+    | ID OPENKEY expressao CLOSEKEY
+    ;
+
+/* 20 */
+simples_expressao
+    : soma_expressao relacional soma_expressao
+    | soma_expressao
+    ;
+
+/* 21 */
+relacional
+    : MINE
+    | MINOR
+    | MAJE
+    | MAJOR
+    | EQUAL
+    | DIFF
+    ;
+
+/* 22 */
+soma_expressao
+    : soma_expressao soma termo
+    | termo
+    ;
+
+/* 23 */
+soma
+    : SUM
+    | MINUS
+    ;
+
+/* 24 */
+termo
+    : termo mult fator
+    | fator
+    ;
+
+/* 25 */
+mult
+    : MULT
+    | DIV
+    ;
+
+/* 26 */
+fator
+    : OPENPAR expressao CLOSEPAR
+    | var
+    | ativacao
     | NUM
+    ;
+
+/* 27 */
+ativacao
+    : ID OPENPAR args CLOSEPAR
+    ;
+
+/* 28 */
+args
+    : arg_lista
+    | /* vazio */
+    ;
+
+/* 29 */
+arg_lista
+    : arg_lista COMMA expressao
+    | expressao
     ;
 
 %%
@@ -156,6 +228,12 @@ int main(int argc, char *argv[])
     }
 
     int resultado = yyparse();
+
+    if (resultado == 0) {
+        printf("Programa sintaticamente correto!\n");
+    } else {
+        printf("Programa possui erros sintaticos.\n");
+    }
 
     fclose(yyin);
 

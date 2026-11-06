@@ -7,6 +7,7 @@ int count_line = 1;
 %}
 
 %option noyywrap
+%option noinput nounput
 
 %x COMMENT
 
@@ -17,7 +18,8 @@ LETRA [a-zA-Z]
 
 "/*"            { BEGIN(COMMENT); }
 <COMMENT>"*/"   { BEGIN(INITIAL); }
-<COMMENT>\n     { count_line++; }
+<COMMENT>\r\n   { count_line++; }
+<COMMENT>[\r\n] { count_line++; }
 <COMMENT>.      { }
 <COMMENT><<EOF>> { fprintf(stderr, "ERRO LÉXICO: /* LINHA: %d\n", count_line); return ERR; }
 

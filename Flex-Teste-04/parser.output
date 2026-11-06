@@ -1,0 +1,1241 @@
+Terminais sem uso na gramática
+
+    ERR
+
+
+Gramática
+
+    0 $accept: programa FIM
+
+    1 programa: declaracao_lista
+
+    2 declaracao_lista: declaracao_lista declaracao
+    3                 | declaracao
+
+    4 declaracao: var_declaracao
+    5           | fun_declaracao
+
+    6 var_declaracao: tipo_especificador ID EOL
+    7               | tipo_especificador ID OPENKEY NUM CLOSEKEY EOL
+
+    8 tipo_especificador: INT
+    9                   | VOID
+
+   10 fun_declaracao: tipo_especificador ID OPENPAR params CLOSEPAR composto_decl
+
+   11 params: param_lista
+   12       | VOID
+
+   13 param_lista: param_lista COMMA param
+   14            | param
+
+   15 param: tipo_especificador ID
+   16      | tipo_especificador ID OPENKEY CLOSEKEY
+
+   17 composto_decl: OPENCOL local_declaracoes statement_lista CLOSECOL
+
+   18 local_declaracoes: local_declaracoes var_declaracao
+   19                  | ε
+
+   20 statement_lista: statement_lista statement
+   21                | ε
+
+   22 statement: expressao_decl
+   23          | composto_decl
+   24          | selecao_decl
+   25          | iteracao_decl
+   26          | retorno_decl
+
+   27 expressao_decl: expressao EOL
+   28               | EOL
+
+   29 selecao_decl: IF OPENPAR expressao CLOSEPAR statement
+   30             | IF OPENPAR expressao CLOSEPAR statement ELSE statement
+
+   31 iteracao_decl: WHILE OPENPAR expressao CLOSEPAR statement
+
+   32 retorno_decl: RET EOL
+   33             | RET expressao EOL
+
+   34 expressao: var ATR expressao
+   35          | simples_expressao
+
+   36 var: ID
+   37    | ID OPENKEY expressao CLOSEKEY
+
+   38 simples_expressao: soma_expressao relacional soma_expressao
+   39                  | soma_expressao
+
+   40 relacional: MINE
+   41           | MINOR
+   42           | MAJE
+   43           | MAJOR
+   44           | EQUAL
+   45           | DIFF
+
+   46 soma_expressao: soma_expressao soma termo
+   47               | termo
+
+   48 soma: SUM
+   49     | MINUS
+
+   50 termo: termo mult fator
+   51      | fator
+
+   52 mult: MULT
+   53     | DIV
+
+   54 fator: OPENPAR expressao CLOSEPAR
+   55      | var
+   56      | ativacao
+   57      | NUM
+
+   58 ativacao: ID OPENPAR args CLOSEPAR
+
+   59 args: arg_lista
+   60     | ε
+
+   61 arg_lista: arg_lista COMMA expressao
+   62          | expressao
+
+
+Terminais, com as regras onde eles aparecem
+
+    FIM (0) 0
+    error (256)
+    IF (258) 29 30
+    ELSE (259) 30
+    INT (260) 8
+    RET (261) 32 33
+    VOID (262) 9 12
+    WHILE (263) 31
+    ID (264) 6 7 10 15 16 36 37 58
+    NUM (265) 7 57
+    SUM (266) 48
+    MINUS (267) 49
+    MULT (268) 52
+    DIV (269) 53
+    MINOR (270) 41
+    MINE (271) 40
+    MAJOR (272) 43
+    MAJE (273) 42
+    EQUAL (274) 44
+    DIFF (275) 45
+    ATR (276) 34
+    EOL (277) 6 7 27 28 32 33
+    COMMA (278) 13 61
+    OPENCOL (279) 17
+    CLOSECOL (280) 17
+    OPENKEY (281) 7 16 37
+    CLOSEKEY (282) 7 16 37
+    OPENPAR (283) 10 29 30 31 54 58
+    CLOSEPAR (284) 10 29 30 31 54 58
+    ERR (285)
+    LOWER_THAN_ELSE (286)
+
+
+Não terminais com as regras onde eles aparecem
+
+    $accept (32)
+        à esquerda: 0
+    programa (33)
+        à esquerda: 1
+        à direita: 0
+    declaracao_lista (34)
+        à esquerda: 2 3
+        à direita: 1 2
+    declaracao (35)
+        à esquerda: 4 5
+        à direita: 2 3
+    var_declaracao (36)
+        à esquerda: 6 7
+        à direita: 4 18
+    tipo_especificador (37)
+        à esquerda: 8 9
+        à direita: 6 7 10 15 16
+    fun_declaracao (38)
+        à esquerda: 10
+        à direita: 5
+    params (39)
+        à esquerda: 11 12
+        à direita: 10
+    param_lista (40)
+        à esquerda: 13 14
+        à direita: 11 13
+    param (41)
+        à esquerda: 15 16
+        à direita: 13 14
+    composto_decl (42)
+        à esquerda: 17
+        à direita: 10 23
+    local_declaracoes (43)
+        à esquerda: 18 19
+        à direita: 17 18
+    statement_lista (44)
+        à esquerda: 20 21
+        à direita: 17 20
+    statement (45)
+        à esquerda: 22 23 24 25 26
+        à direita: 20 29 30 31
+    expressao_decl (46)
+        à esquerda: 27 28
+        à direita: 22
+    selecao_decl (47)
+        à esquerda: 29 30
+        à direita: 24
+    iteracao_decl (48)
+        à esquerda: 31
+        à direita: 25
+    retorno_decl (49)
+        à esquerda: 32 33
+        à direita: 26
+    expressao (50)
+        à esquerda: 34 35
+        à direita: 27 29 30 31 33 34 37 54 61 62
+    var (51)
+        à esquerda: 36 37
+        à direita: 34 55
+    simples_expressao (52)
+        à esquerda: 38 39
+        à direita: 35
+    relacional (53)
+        à esquerda: 40 41 42 43 44 45
+        à direita: 38
+    soma_expressao (54)
+        à esquerda: 46 47
+        à direita: 38 39 46
+    soma (55)
+        à esquerda: 48 49
+        à direita: 46
+    termo (56)
+        à esquerda: 50 51
+        à direita: 46 47 50
+    mult (57)
+        à esquerda: 52 53
+        à direita: 50
+    fator (58)
+        à esquerda: 54 55 56 57
+        à direita: 50 51
+    ativacao (59)
+        à esquerda: 58
+        à direita: 56
+    args (60)
+        à esquerda: 59 60
+        à direita: 58
+    arg_lista (61)
+        à esquerda: 61 62
+        à direita: 59 61
+
+
+Estado 0
+
+    0 $accept: • programa FIM
+
+    INT   deslocar, e ir ao estado 1
+    VOID  deslocar, e ir ao estado 2
+
+    programa            ir ao estado 3
+    declaracao_lista    ir ao estado 4
+    declaracao          ir ao estado 5
+    var_declaracao      ir ao estado 6
+    tipo_especificador  ir ao estado 7
+    fun_declaracao      ir ao estado 8
+
+
+Estado 1
+
+    8 tipo_especificador: INT •
+
+    $padrão  reduzir usando a regra 8 (tipo_especificador)
+
+
+Estado 2
+
+    9 tipo_especificador: VOID •
+
+    $padrão  reduzir usando a regra 9 (tipo_especificador)
+
+
+Estado 3
+
+    0 $accept: programa • FIM
+
+    FIM  deslocar, e ir ao estado 9
+
+
+Estado 4
+
+    1 programa: declaracao_lista •
+    2 declaracao_lista: declaracao_lista • declaracao
+
+    INT   deslocar, e ir ao estado 1
+    VOID  deslocar, e ir ao estado 2
+
+    $padrão  reduzir usando a regra 1 (programa)
+
+    declaracao          ir ao estado 10
+    var_declaracao      ir ao estado 6
+    tipo_especificador  ir ao estado 7
+    fun_declaracao      ir ao estado 8
+
+
+Estado 5
+
+    3 declaracao_lista: declaracao •
+
+    $padrão  reduzir usando a regra 3 (declaracao_lista)
+
+
+Estado 6
+
+    4 declaracao: var_declaracao •
+
+    $padrão  reduzir usando a regra 4 (declaracao)
+
+
+Estado 7
+
+    6 var_declaracao: tipo_especificador • ID EOL
+    7               | tipo_especificador • ID OPENKEY NUM CLOSEKEY EOL
+   10 fun_declaracao: tipo_especificador • ID OPENPAR params CLOSEPAR composto_decl
+
+    ID  deslocar, e ir ao estado 11
+
+
+Estado 8
+
+    5 declaracao: fun_declaracao •
+
+    $padrão  reduzir usando a regra 5 (declaracao)
+
+
+Estado 9
+
+    0 $accept: programa FIM •
+
+    $padrão  aceitar
+
+
+Estado 10
+
+    2 declaracao_lista: declaracao_lista declaracao •
+
+    $padrão  reduzir usando a regra 2 (declaracao_lista)
+
+
+Estado 11
+
+    6 var_declaracao: tipo_especificador ID • EOL
+    7               | tipo_especificador ID • OPENKEY NUM CLOSEKEY EOL
+   10 fun_declaracao: tipo_especificador ID • OPENPAR params CLOSEPAR composto_decl
+
+    EOL      deslocar, e ir ao estado 12
+    OPENKEY  deslocar, e ir ao estado 13
+    OPENPAR  deslocar, e ir ao estado 14
+
+
+Estado 12
+
+    6 var_declaracao: tipo_especificador ID EOL •
+
+    $padrão  reduzir usando a regra 6 (var_declaracao)
+
+
+Estado 13
+
+    7 var_declaracao: tipo_especificador ID OPENKEY • NUM CLOSEKEY EOL
+
+    NUM  deslocar, e ir ao estado 15
+
+
+Estado 14
+
+   10 fun_declaracao: tipo_especificador ID OPENPAR • params CLOSEPAR composto_decl
+
+    INT   deslocar, e ir ao estado 1
+    VOID  deslocar, e ir ao estado 16
+
+    tipo_especificador  ir ao estado 17
+    params              ir ao estado 18
+    param_lista         ir ao estado 19
+    param               ir ao estado 20
+
+
+Estado 15
+
+    7 var_declaracao: tipo_especificador ID OPENKEY NUM • CLOSEKEY EOL
+
+    CLOSEKEY  deslocar, e ir ao estado 21
+
+
+Estado 16
+
+    9 tipo_especificador: VOID •
+   12 params: VOID •
+
+    CLOSEPAR  reduzir usando a regra 12 (params)
+    $padrão   reduzir usando a regra 9 (tipo_especificador)
+
+
+Estado 17
+
+   15 param: tipo_especificador • ID
+   16      | tipo_especificador • ID OPENKEY CLOSEKEY
+
+    ID  deslocar, e ir ao estado 22
+
+
+Estado 18
+
+   10 fun_declaracao: tipo_especificador ID OPENPAR params • CLOSEPAR composto_decl
+
+    CLOSEPAR  deslocar, e ir ao estado 23
+
+
+Estado 19
+
+   11 params: param_lista •
+   13 param_lista: param_lista • COMMA param
+
+    COMMA  deslocar, e ir ao estado 24
+
+    $padrão  reduzir usando a regra 11 (params)
+
+
+Estado 20
+
+   14 param_lista: param •
+
+    $padrão  reduzir usando a regra 14 (param_lista)
+
+
+Estado 21
+
+    7 var_declaracao: tipo_especificador ID OPENKEY NUM CLOSEKEY • EOL
+
+    EOL  deslocar, e ir ao estado 25
+
+
+Estado 22
+
+   15 param: tipo_especificador ID •
+   16      | tipo_especificador ID • OPENKEY CLOSEKEY
+
+    OPENKEY  deslocar, e ir ao estado 26
+
+    $padrão  reduzir usando a regra 15 (param)
+
+
+Estado 23
+
+   10 fun_declaracao: tipo_especificador ID OPENPAR params CLOSEPAR • composto_decl
+
+    OPENCOL  deslocar, e ir ao estado 27
+
+    composto_decl  ir ao estado 28
+
+
+Estado 24
+
+   13 param_lista: param_lista COMMA • param
+
+    INT   deslocar, e ir ao estado 1
+    VOID  deslocar, e ir ao estado 2
+
+    tipo_especificador  ir ao estado 17
+    param               ir ao estado 29
+
+
+Estado 25
+
+    7 var_declaracao: tipo_especificador ID OPENKEY NUM CLOSEKEY EOL •
+
+    $padrão  reduzir usando a regra 7 (var_declaracao)
+
+
+Estado 26
+
+   16 param: tipo_especificador ID OPENKEY • CLOSEKEY
+
+    CLOSEKEY  deslocar, e ir ao estado 30
+
+
+Estado 27
+
+   17 composto_decl: OPENCOL • local_declaracoes statement_lista CLOSECOL
+
+    $padrão  reduzir usando a regra 19 (local_declaracoes)
+
+    local_declaracoes  ir ao estado 31
+
+
+Estado 28
+
+   10 fun_declaracao: tipo_especificador ID OPENPAR params CLOSEPAR composto_decl •
+
+    $padrão  reduzir usando a regra 10 (fun_declaracao)
+
+
+Estado 29
+
+   13 param_lista: param_lista COMMA param •
+
+    $padrão  reduzir usando a regra 13 (param_lista)
+
+
+Estado 30
+
+   16 param: tipo_especificador ID OPENKEY CLOSEKEY •
+
+    $padrão  reduzir usando a regra 16 (param)
+
+
+Estado 31
+
+   17 composto_decl: OPENCOL local_declaracoes • statement_lista CLOSECOL
+   18 local_declaracoes: local_declaracoes • var_declaracao
+
+    INT   deslocar, e ir ao estado 1
+    VOID  deslocar, e ir ao estado 2
+
+    $padrão  reduzir usando a regra 21 (statement_lista)
+
+    var_declaracao      ir ao estado 32
+    tipo_especificador  ir ao estado 33
+    statement_lista     ir ao estado 34
+
+
+Estado 32
+
+   18 local_declaracoes: local_declaracoes var_declaracao •
+
+    $padrão  reduzir usando a regra 18 (local_declaracoes)
+
+
+Estado 33
+
+    6 var_declaracao: tipo_especificador • ID EOL
+    7               | tipo_especificador • ID OPENKEY NUM CLOSEKEY EOL
+
+    ID  deslocar, e ir ao estado 35
+
+
+Estado 34
+
+   17 composto_decl: OPENCOL local_declaracoes statement_lista • CLOSECOL
+   20 statement_lista: statement_lista • statement
+
+    IF        deslocar, e ir ao estado 36
+    RET       deslocar, e ir ao estado 37
+    WHILE     deslocar, e ir ao estado 38
+    ID        deslocar, e ir ao estado 39
+    NUM       deslocar, e ir ao estado 40
+    EOL       deslocar, e ir ao estado 41
+    OPENCOL   deslocar, e ir ao estado 27
+    CLOSECOL  deslocar, e ir ao estado 42
+    OPENPAR   deslocar, e ir ao estado 43
+
+    composto_decl      ir ao estado 44
+    statement          ir ao estado 45
+    expressao_decl     ir ao estado 46
+    selecao_decl       ir ao estado 47
+    iteracao_decl      ir ao estado 48
+    retorno_decl       ir ao estado 49
+    expressao          ir ao estado 50
+    var                ir ao estado 51
+    simples_expressao  ir ao estado 52
+    soma_expressao     ir ao estado 53
+    termo              ir ao estado 54
+    fator              ir ao estado 55
+    ativacao           ir ao estado 56
+
+
+Estado 35
+
+    6 var_declaracao: tipo_especificador ID • EOL
+    7               | tipo_especificador ID • OPENKEY NUM CLOSEKEY EOL
+
+    EOL      deslocar, e ir ao estado 12
+    OPENKEY  deslocar, e ir ao estado 13
+
+
+Estado 36
+
+   29 selecao_decl: IF • OPENPAR expressao CLOSEPAR statement
+   30             | IF • OPENPAR expressao CLOSEPAR statement ELSE statement
+
+    OPENPAR  deslocar, e ir ao estado 57
+
+
+Estado 37
+
+   32 retorno_decl: RET • EOL
+   33             | RET • expressao EOL
+
+    ID       deslocar, e ir ao estado 39
+    NUM      deslocar, e ir ao estado 40
+    EOL      deslocar, e ir ao estado 58
+    OPENPAR  deslocar, e ir ao estado 43
+
+    expressao          ir ao estado 59
+    var                ir ao estado 51
+    simples_expressao  ir ao estado 52
+    soma_expressao     ir ao estado 53
+    termo              ir ao estado 54
+    fator              ir ao estado 55
+    ativacao           ir ao estado 56
+
+
+Estado 38
+
+   31 iteracao_decl: WHILE • OPENPAR expressao CLOSEPAR statement
+
+    OPENPAR  deslocar, e ir ao estado 60
+
+
+Estado 39
+
+   36 var: ID •
+   37    | ID • OPENKEY expressao CLOSEKEY
+   58 ativacao: ID • OPENPAR args CLOSEPAR
+
+    OPENKEY  deslocar, e ir ao estado 61
+    OPENPAR  deslocar, e ir ao estado 62
+
+    $padrão  reduzir usando a regra 36 (var)
+
+
+Estado 40
+
+   57 fator: NUM •
+
+    $padrão  reduzir usando a regra 57 (fator)
+
+
+Estado 41
+
+   28 expressao_decl: EOL •
+
+    $padrão  reduzir usando a regra 28 (expressao_decl)
+
+
+Estado 42
+
+   17 composto_decl: OPENCOL local_declaracoes statement_lista CLOSECOL •
+
+    $padrão  reduzir usando a regra 17 (composto_decl)
+
+
+Estado 43
+
+   54 fator: OPENPAR • expressao CLOSEPAR
+
+    ID       deslocar, e ir ao estado 39
+    NUM      deslocar, e ir ao estado 40
+    OPENPAR  deslocar, e ir ao estado 43
+
+    expressao          ir ao estado 63
+    var                ir ao estado 51
+    simples_expressao  ir ao estado 52
+    soma_expressao     ir ao estado 53
+    termo              ir ao estado 54
+    fator              ir ao estado 55
+    ativacao           ir ao estado 56
+
+
+Estado 44
+
+   23 statement: composto_decl •
+
+    $padrão  reduzir usando a regra 23 (statement)
+
+
+Estado 45
+
+   20 statement_lista: statement_lista statement •
+
+    $padrão  reduzir usando a regra 20 (statement_lista)
+
+
+Estado 46
+
+   22 statement: expressao_decl •
+
+    $padrão  reduzir usando a regra 22 (statement)
+
+
+Estado 47
+
+   24 statement: selecao_decl •
+
+    $padrão  reduzir usando a regra 24 (statement)
+
+
+Estado 48
+
+   25 statement: iteracao_decl •
+
+    $padrão  reduzir usando a regra 25 (statement)
+
+
+Estado 49
+
+   26 statement: retorno_decl •
+
+    $padrão  reduzir usando a regra 26 (statement)
+
+
+Estado 50
+
+   27 expressao_decl: expressao • EOL
+
+    EOL  deslocar, e ir ao estado 64
+
+
+Estado 51
+
+   34 expressao: var • ATR expressao
+   55 fator: var •
+
+    ATR  deslocar, e ir ao estado 65
+
+    $padrão  reduzir usando a regra 55 (fator)
+
+
+Estado 52
+
+   35 expressao: simples_expressao •
+
+    $padrão  reduzir usando a regra 35 (expressao)
+
+
+Estado 53
+
+   38 simples_expressao: soma_expressao • relacional soma_expressao
+   39                  | soma_expressao •
+   46 soma_expressao: soma_expressao • soma termo
+
+    SUM    deslocar, e ir ao estado 66
+    MINUS  deslocar, e ir ao estado 67
+    MINOR  deslocar, e ir ao estado 68
+    MINE   deslocar, e ir ao estado 69
+    MAJOR  deslocar, e ir ao estado 70
+    MAJE   deslocar, e ir ao estado 71
+    EQUAL  deslocar, e ir ao estado 72
+    DIFF   deslocar, e ir ao estado 73
+
+    $padrão  reduzir usando a regra 39 (simples_expressao)
+
+    relacional  ir ao estado 74
+    soma        ir ao estado 75
+
+
+Estado 54
+
+   47 soma_expressao: termo •
+   50 termo: termo • mult fator
+
+    MULT  deslocar, e ir ao estado 76
+    DIV   deslocar, e ir ao estado 77
+
+    $padrão  reduzir usando a regra 47 (soma_expressao)
+
+    mult  ir ao estado 78
+
+
+Estado 55
+
+   51 termo: fator •
+
+    $padrão  reduzir usando a regra 51 (termo)
+
+
+Estado 56
+
+   56 fator: ativacao •
+
+    $padrão  reduzir usando a regra 56 (fator)
+
+
+Estado 57
+
+   29 selecao_decl: IF OPENPAR • expressao CLOSEPAR statement
+   30             | IF OPENPAR • expressao CLOSEPAR statement ELSE statement
+
+    ID       deslocar, e ir ao estado 39
+    NUM      deslocar, e ir ao estado 40
+    OPENPAR  deslocar, e ir ao estado 43
+
+    expressao          ir ao estado 79
+    var                ir ao estado 51
+    simples_expressao  ir ao estado 52
+    soma_expressao     ir ao estado 53
+    termo              ir ao estado 54
+    fator              ir ao estado 55
+    ativacao           ir ao estado 56
+
+
+Estado 58
+
+   32 retorno_decl: RET EOL •
+
+    $padrão  reduzir usando a regra 32 (retorno_decl)
+
+
+Estado 59
+
+   33 retorno_decl: RET expressao • EOL
+
+    EOL  deslocar, e ir ao estado 80
+
+
+Estado 60
+
+   31 iteracao_decl: WHILE OPENPAR • expressao CLOSEPAR statement
+
+    ID       deslocar, e ir ao estado 39
+    NUM      deslocar, e ir ao estado 40
+    OPENPAR  deslocar, e ir ao estado 43
+
+    expressao          ir ao estado 81
+    var                ir ao estado 51
+    simples_expressao  ir ao estado 52
+    soma_expressao     ir ao estado 53
+    termo              ir ao estado 54
+    fator              ir ao estado 55
+    ativacao           ir ao estado 56
+
+
+Estado 61
+
+   37 var: ID OPENKEY • expressao CLOSEKEY
+
+    ID       deslocar, e ir ao estado 39
+    NUM      deslocar, e ir ao estado 40
+    OPENPAR  deslocar, e ir ao estado 43
+
+    expressao          ir ao estado 82
+    var                ir ao estado 51
+    simples_expressao  ir ao estado 52
+    soma_expressao     ir ao estado 53
+    termo              ir ao estado 54
+    fator              ir ao estado 55
+    ativacao           ir ao estado 56
+
+
+Estado 62
+
+   58 ativacao: ID OPENPAR • args CLOSEPAR
+
+    ID       deslocar, e ir ao estado 39
+    NUM      deslocar, e ir ao estado 40
+    OPENPAR  deslocar, e ir ao estado 43
+
+    $padrão  reduzir usando a regra 60 (args)
+
+    expressao          ir ao estado 83
+    var                ir ao estado 51
+    simples_expressao  ir ao estado 52
+    soma_expressao     ir ao estado 53
+    termo              ir ao estado 54
+    fator              ir ao estado 55
+    ativacao           ir ao estado 56
+    args               ir ao estado 84
+    arg_lista          ir ao estado 85
+
+
+Estado 63
+
+   54 fator: OPENPAR expressao • CLOSEPAR
+
+    CLOSEPAR  deslocar, e ir ao estado 86
+
+
+Estado 64
+
+   27 expressao_decl: expressao EOL •
+
+    $padrão  reduzir usando a regra 27 (expressao_decl)
+
+
+Estado 65
+
+   34 expressao: var ATR • expressao
+
+    ID       deslocar, e ir ao estado 39
+    NUM      deslocar, e ir ao estado 40
+    OPENPAR  deslocar, e ir ao estado 43
+
+    expressao          ir ao estado 87
+    var                ir ao estado 51
+    simples_expressao  ir ao estado 52
+    soma_expressao     ir ao estado 53
+    termo              ir ao estado 54
+    fator              ir ao estado 55
+    ativacao           ir ao estado 56
+
+
+Estado 66
+
+   48 soma: SUM •
+
+    $padrão  reduzir usando a regra 48 (soma)
+
+
+Estado 67
+
+   49 soma: MINUS •
+
+    $padrão  reduzir usando a regra 49 (soma)
+
+
+Estado 68
+
+   41 relacional: MINOR •
+
+    $padrão  reduzir usando a regra 41 (relacional)
+
+
+Estado 69
+
+   40 relacional: MINE •
+
+    $padrão  reduzir usando a regra 40 (relacional)
+
+
+Estado 70
+
+   43 relacional: MAJOR •
+
+    $padrão  reduzir usando a regra 43 (relacional)
+
+
+Estado 71
+
+   42 relacional: MAJE •
+
+    $padrão  reduzir usando a regra 42 (relacional)
+
+
+Estado 72
+
+   44 relacional: EQUAL •
+
+    $padrão  reduzir usando a regra 44 (relacional)
+
+
+Estado 73
+
+   45 relacional: DIFF •
+
+    $padrão  reduzir usando a regra 45 (relacional)
+
+
+Estado 74
+
+   38 simples_expressao: soma_expressao relacional • soma_expressao
+
+    ID       deslocar, e ir ao estado 39
+    NUM      deslocar, e ir ao estado 40
+    OPENPAR  deslocar, e ir ao estado 43
+
+    var             ir ao estado 88
+    soma_expressao  ir ao estado 89
+    termo           ir ao estado 54
+    fator           ir ao estado 55
+    ativacao        ir ao estado 56
+
+
+Estado 75
+
+   46 soma_expressao: soma_expressao soma • termo
+
+    ID       deslocar, e ir ao estado 39
+    NUM      deslocar, e ir ao estado 40
+    OPENPAR  deslocar, e ir ao estado 43
+
+    var       ir ao estado 88
+    termo     ir ao estado 90
+    fator     ir ao estado 55
+    ativacao  ir ao estado 56
+
+
+Estado 76
+
+   52 mult: MULT •
+
+    $padrão  reduzir usando a regra 52 (mult)
+
+
+Estado 77
+
+   53 mult: DIV •
+
+    $padrão  reduzir usando a regra 53 (mult)
+
+
+Estado 78
+
+   50 termo: termo mult • fator
+
+    ID       deslocar, e ir ao estado 39
+    NUM      deslocar, e ir ao estado 40
+    OPENPAR  deslocar, e ir ao estado 43
+
+    var       ir ao estado 88
+    fator     ir ao estado 91
+    ativacao  ir ao estado 56
+
+
+Estado 79
+
+   29 selecao_decl: IF OPENPAR expressao • CLOSEPAR statement
+   30             | IF OPENPAR expressao • CLOSEPAR statement ELSE statement
+
+    CLOSEPAR  deslocar, e ir ao estado 92
+
+
+Estado 80
+
+   33 retorno_decl: RET expressao EOL •
+
+    $padrão  reduzir usando a regra 33 (retorno_decl)
+
+
+Estado 81
+
+   31 iteracao_decl: WHILE OPENPAR expressao • CLOSEPAR statement
+
+    CLOSEPAR  deslocar, e ir ao estado 93
+
+
+Estado 82
+
+   37 var: ID OPENKEY expressao • CLOSEKEY
+
+    CLOSEKEY  deslocar, e ir ao estado 94
+
+
+Estado 83
+
+   62 arg_lista: expressao •
+
+    $padrão  reduzir usando a regra 62 (arg_lista)
+
+
+Estado 84
+
+   58 ativacao: ID OPENPAR args • CLOSEPAR
+
+    CLOSEPAR  deslocar, e ir ao estado 95
+
+
+Estado 85
+
+   59 args: arg_lista •
+   61 arg_lista: arg_lista • COMMA expressao
+
+    COMMA  deslocar, e ir ao estado 96
+
+    $padrão  reduzir usando a regra 59 (args)
+
+
+Estado 86
+
+   54 fator: OPENPAR expressao CLOSEPAR •
+
+    $padrão  reduzir usando a regra 54 (fator)
+
+
+Estado 87
+
+   34 expressao: var ATR expressao •
+
+    $padrão  reduzir usando a regra 34 (expressao)
+
+
+Estado 88
+
+   55 fator: var •
+
+    $padrão  reduzir usando a regra 55 (fator)
+
+
+Estado 89
+
+   38 simples_expressao: soma_expressao relacional soma_expressao •
+   46 soma_expressao: soma_expressao • soma termo
+
+    SUM    deslocar, e ir ao estado 66
+    MINUS  deslocar, e ir ao estado 67
+
+    $padrão  reduzir usando a regra 38 (simples_expressao)
+
+    soma  ir ao estado 75
+
+
+Estado 90
+
+   46 soma_expressao: soma_expressao soma termo •
+   50 termo: termo • mult fator
+
+    MULT  deslocar, e ir ao estado 76
+    DIV   deslocar, e ir ao estado 77
+
+    $padrão  reduzir usando a regra 46 (soma_expressao)
+
+    mult  ir ao estado 78
+
+
+Estado 91
+
+   50 termo: termo mult fator •
+
+    $padrão  reduzir usando a regra 50 (termo)
+
+
+Estado 92
+
+   29 selecao_decl: IF OPENPAR expressao CLOSEPAR • statement
+   30             | IF OPENPAR expressao CLOSEPAR • statement ELSE statement
+
+    IF       deslocar, e ir ao estado 36
+    RET      deslocar, e ir ao estado 37
+    WHILE    deslocar, e ir ao estado 38
+    ID       deslocar, e ir ao estado 39
+    NUM      deslocar, e ir ao estado 40
+    EOL      deslocar, e ir ao estado 41
+    OPENCOL  deslocar, e ir ao estado 27
+    OPENPAR  deslocar, e ir ao estado 43
+
+    composto_decl      ir ao estado 44
+    statement          ir ao estado 97
+    expressao_decl     ir ao estado 46
+    selecao_decl       ir ao estado 47
+    iteracao_decl      ir ao estado 48
+    retorno_decl       ir ao estado 49
+    expressao          ir ao estado 50
+    var                ir ao estado 51
+    simples_expressao  ir ao estado 52
+    soma_expressao     ir ao estado 53
+    termo              ir ao estado 54
+    fator              ir ao estado 55
+    ativacao           ir ao estado 56
+
+
+Estado 93
+
+   31 iteracao_decl: WHILE OPENPAR expressao CLOSEPAR • statement
+
+    IF       deslocar, e ir ao estado 36
+    RET      deslocar, e ir ao estado 37
+    WHILE    deslocar, e ir ao estado 38
+    ID       deslocar, e ir ao estado 39
+    NUM      deslocar, e ir ao estado 40
+    EOL      deslocar, e ir ao estado 41
+    OPENCOL  deslocar, e ir ao estado 27
+    OPENPAR  deslocar, e ir ao estado 43
+
+    composto_decl      ir ao estado 44
+    statement          ir ao estado 98
+    expressao_decl     ir ao estado 46
+    selecao_decl       ir ao estado 47
+    iteracao_decl      ir ao estado 48
+    retorno_decl       ir ao estado 49
+    expressao          ir ao estado 50
+    var                ir ao estado 51
+    simples_expressao  ir ao estado 52
+    soma_expressao     ir ao estado 53
+    termo              ir ao estado 54
+    fator              ir ao estado 55
+    ativacao           ir ao estado 56
+
+
+Estado 94
+
+   37 var: ID OPENKEY expressao CLOSEKEY •
+
+    $padrão  reduzir usando a regra 37 (var)
+
+
+Estado 95
+
+   58 ativacao: ID OPENPAR args CLOSEPAR •
+
+    $padrão  reduzir usando a regra 58 (ativacao)
+
+
+Estado 96
+
+   61 arg_lista: arg_lista COMMA • expressao
+
+    ID       deslocar, e ir ao estado 39
+    NUM      deslocar, e ir ao estado 40
+    OPENPAR  deslocar, e ir ao estado 43
+
+    expressao          ir ao estado 99
+    var                ir ao estado 51
+    simples_expressao  ir ao estado 52
+    soma_expressao     ir ao estado 53
+    termo              ir ao estado 54
+    fator              ir ao estado 55
+    ativacao           ir ao estado 56
+
+
+Estado 97
+
+   29 selecao_decl: IF OPENPAR expressao CLOSEPAR statement •
+   30             | IF OPENPAR expressao CLOSEPAR statement • ELSE statement
+
+    ELSE  deslocar, e ir ao estado 100
+
+    $padrão  reduzir usando a regra 29 (selecao_decl)
+
+
+Estado 98
+
+   31 iteracao_decl: WHILE OPENPAR expressao CLOSEPAR statement •
+
+    $padrão  reduzir usando a regra 31 (iteracao_decl)
+
+
+Estado 99
+
+   61 arg_lista: arg_lista COMMA expressao •
+
+    $padrão  reduzir usando a regra 61 (arg_lista)
+
+
+Estado 100
+
+   30 selecao_decl: IF OPENPAR expressao CLOSEPAR statement ELSE • statement
+
+    IF       deslocar, e ir ao estado 36
+    RET      deslocar, e ir ao estado 37
+    WHILE    deslocar, e ir ao estado 38
+    ID       deslocar, e ir ao estado 39
+    NUM      deslocar, e ir ao estado 40
+    EOL      deslocar, e ir ao estado 41
+    OPENCOL  deslocar, e ir ao estado 27
+    OPENPAR  deslocar, e ir ao estado 43
+
+    composto_decl      ir ao estado 44
+    statement          ir ao estado 101
+    expressao_decl     ir ao estado 46
+    selecao_decl       ir ao estado 47
+    iteracao_decl      ir ao estado 48
+    retorno_decl       ir ao estado 49
+    expressao          ir ao estado 50
+    var                ir ao estado 51
+    simples_expressao  ir ao estado 52
+    soma_expressao     ir ao estado 53
+    termo              ir ao estado 54
+    fator              ir ao estado 55
+    ativacao           ir ao estado 56
+
+
+Estado 101
+
+   30 selecao_decl: IF OPENPAR expressao CLOSEPAR statement ELSE statement •
+
+    $padrão  reduzir usando a regra 30 (selecao_decl)
